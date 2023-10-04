@@ -1,23 +1,25 @@
 import "./index.css";
-import { useState, useEffect } from "react";
+import {useState,useEffect} from "react"
 
 const App = () => {
-  const [windowSize,setWindowSize]=useState(window.innerWidth)
-  const sizecontrol=()=>{
-    setWindowSize(window.innerWidth)
+  const [quote,setquote]=useState("vychozi text")
+  const url="https://api.kanye.rest/"
+
+  
+
+  const getquote=async()=>{
+    const response= await fetch(url)
+    const data= await response.json()
+    const finalQuote=(data["quote"])
+    setquote(finalQuote)
   }
   useEffect(()=>{
-    console.log("ja jsem useEffenc")
-    window.addEventListener("resize",sizecontrol)
-    return ()=>{
-      console.log("ja jsem cleanUP function")
-      window.removeEventListener("resize",sizecontrol)
-    }
-  })
+    getquote()
+  },[])
+
   return (
     <div>
-      <h1>sirka okna</h1>
-      <h2>{windowSize}</h2>
+      <h1>{quote}</h1>
     </div>
   );
 };
