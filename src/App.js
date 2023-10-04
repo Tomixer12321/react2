@@ -7,7 +7,12 @@ const App = () => {
     setWindowSize(window.innerWidth)
   }
   useEffect(()=>{
+    console.log("ja jsem useEffenc")
     window.addEventListener("resize",sizecontrol)
+    return ()=>{
+      console.log("ja jsem cleanUP function")
+      window.removeEventListener("resize",sizecontrol)
+    }
   })
   return (
     <div>
