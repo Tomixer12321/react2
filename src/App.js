@@ -1,35 +1,31 @@
-import "./index.css";
 import { useState, useEffect } from "react";
+const url = "http://api.open-notify.org/iss-now.json";
+
+
 const App = () => {
-  const url = "http://api.open-notify.org/iss-now.json";
-  const [latitude, setlatitude] = useState("");
-  const [longitude, setlongitude] = useState("");
-  const [urlMap, setUrlMap] = useState("");
+  const [loading, setloading] = useState(false);
+  const [latitude,setlatitude]=useState("")
+  const [longitude,setlongitude]=useState("")
 
-  const getCoordinates = async () => {
-    const responst = await fetch(url);
-    const data = await responst.json();
-    setlatitude(data["iss_position"]["latitude"]);
-    setlongitude(data["iss_position"]["longitude"]);
-
-    const iss_long =data["iss_position"]["longitude"]
-    const iss_lat =data["iss_position"]["latitude"]
-
-    setUrlMap(`https://sk.mapy.cz/zakladni?x=${iss_long}&y=${iss_lat}&z=5`);
-  };
   useEffect(() => {
-    getCoordinates();
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => data["iss_position"])
+      .then((position)=>{
+        setlatitude(position["latitude"])
+        setlongitude(position["longitude"])
+      })
   }, []);
 
-  return (
-    <div>
-      <h1>API</h1>
-      <h1>zemepisna sirka</h1>
+  if(loading){
+    return <h1>nacitani stranky...</h1>;
+  }
+    return <div>
+      <h2>zemepisna siska</h2>
       <p>{latitude}</p>
-      <h1>zemepisna delka</h1>
+      <h2>zemiepisna delka</h2>
       <p>{longitude}</p>
-      <a href={urlMap} target="_blank">odkaz od map</a>
     </div>
-  );
+  
 };
 export default App;
